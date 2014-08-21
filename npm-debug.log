@@ -1,0 +1,68 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\MyScratchFolder\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\MyScratchFolder\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'npm-offline' ]
+2 info using npm@1.2.14
+3 info using node@v0.10.18
+4 verbose node symlink C:\MyScratchFolder\nodejs\\node.exe
+5 verbose read json C:\Users\jscott\AppData\Roaming\npm\package.json
+6 verbose read json C:\Users\jscott\AppData\Roaming\npm\package.json
+7 verbose cache add [ 'npm-offline', null ]
+8 verbose cache add name=undefined spec="npm-offline" args=["npm-offline",null]
+9 verbose parsed url { protocol: null,
+9 verbose parsed url   slashes: null,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: null,
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: null,
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: 'npm-offline',
+9 verbose parsed url   path: 'npm-offline',
+9 verbose parsed url   href: 'npm-offline' }
+10 silly lockFile 9d87347d-npm-offline npm-offline
+11 verbose lock npm-offline C:\Users\jscott\AppData\Roaming\npm-cache\9d87347d-npm-offline.lock
+12 silly lockFile 9d87347d-npm-offline npm-offline
+13 silly lockFile 9d87347d-npm-offline npm-offline
+14 verbose addNamed [ 'npm-offline', '' ]
+15 verbose addNamed [ null, '' ]
+16 silly lockFile f484ff1d-npm-offline npm-offline@
+17 verbose lock npm-offline@ C:\Users\jscott\AppData\Roaming\npm-cache\f484ff1d-npm-offline.lock
+18 silly addNameRange { name: 'npm-offline', range: '', hasData: false }
+19 verbose url raw npm-offline
+20 verbose url resolving [ 'http://registry.npmjs.org/', './npm-offline' ]
+21 verbose url resolved http://registry.npmjs.org/npm-offline
+22 info trying registry request attempt 1 at 10:26:21
+23 http GET http://registry.npmjs.org/npm-offline
+24 info retry will retry, error on last attempt: Error: connect ECONNREFUSED
+25 info trying registry request attempt 2 at 10:26:32
+26 http GET http://registry.npmjs.org/npm-offline
+27 info retry will retry, error on last attempt: Error: connect ECONNREFUSED
+28 info trying registry request attempt 3 at 10:27:33
+29 http GET http://registry.npmjs.org/npm-offline
+30 silly lockFile f484ff1d-npm-offline npm-offline@
+31 silly lockFile f484ff1d-npm-offline npm-offline@
+32 error Error: connect ECONNREFUSED
+32 error     at errnoException (net.js:901:11)
+32 error     at Object.afterConnect [as oncomplete] (net.js:892:19)
+32 error  { [Error: connect ECONNREFUSED]
+32 error   code: 'ECONNREFUSED',
+32 error   errno: 'ECONNREFUSED',
+32 error   syscall: 'connect' }
+33 error If you are behind a proxy, please make sure that the
+33 error 'proxy' config is set properly.  See: 'npm help config'
+34 error System Windows_NT 6.1.7601
+35 error command "C:\\MyScratchFolder\\nodejs\\\\node.exe" "C:\\MyScratchFolder\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "-g" "npm-offline"
+36 error cwd C:\MyScratchFolder\workspace-scala\test-scalaz
+37 error node -v v0.10.18
+38 error npm -v 1.2.14
+39 error syscall connect
+40 error code ECONNREFUSED
+41 error errno ECONNREFUSED
+42 error stack Error: connect ECONNREFUSED
+42 error stack     at errnoException (net.js:901:11)
+42 error stack     at Object.afterConnect [as oncomplete] (net.js:892:19)
+43 verbose exit [ 1, true ]

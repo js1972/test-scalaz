@@ -4,9 +4,11 @@ import scalaz._
 import Scalaz._
 import java.util.{Date, Calendar}
 
-// these are for testing out the Play json pretty print - not working yet!
+// these are for testing out the Play json pretty print
 import play.api.libs.json._
 import play.api.libs.functional._
+// this one is an extension to play-json to handle class hierarchies from a sealed trait
+import julienrf.variants.Variants
 
 
 /**
@@ -55,9 +57,13 @@ object EndoFluent {
     val now = Calendar.getInstance().getTime()
     val t = doTrade(Trade("12345", now, None, Security("GOOG", "Google Inc."), 1000))
     println(t)
+    
+    
+    // Print out the trade in json format - easier to visualise
+    implicit val instrumentFormat: Format[Instrument] = Variants.format[Instrument]
+    implicit val tradeStatusFormat: Format[TradeStatus] = Variants.format[TradeStatus]
+    implicit val tradeFormat = Json.format[Trade]
     println
-    
-    
-    //println(Json.prettyPrint(Json.toJson(t)))
+    println(Json.prettyPrint(Json.toJson(t)))
   }
 }

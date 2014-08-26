@@ -38,4 +38,11 @@ object monoids {
   
   (none: Option[String]) |+| "jason".some         //> res9: Option[String] = Some(jason)
   (Ordering.LT: Ordering).some |+| none           //> res10: Option[scalaz.Ordering] = Some(LT)
+  
+  
+  def lengthCompare(lhs: String, rhs: String): Ordering =
+    (lhs.length ?|? rhs.length) |+| (lhs ?|? rhs) //> lengthCompare: (lhs: String, rhs: String)scalaz.Ordering
+  
+  lengthCompare("zen", "ants")                    //> res11: scalaz.Ordering = LT
+  lengthCompare("zen", "ant")                     //> res12: scalaz.Ordering = GT
 }

@@ -142,7 +142,7 @@ object reader {
       _ <- put(xs)
     } yield x
   }                                               //> pop  : scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.Config,s
-                                                  //| calaz.stuff.reader.Stack,Int] = scalaz.IndexedStateT$$anon$10@5d09958a
+                                                  //| calaz.stuff.reader.Stack,Int] = scalaz.IndexedStateT$$anon$10@2927ac23
   def push(x: Int): StateTReaderTOption[Config, Stack, Unit] = {
     import StateTReaderTOption.{get, put}
     for {
@@ -175,5 +175,5 @@ object reader {
   
   stackManip2(List(5, 8, 2, 1))(Map("x" -> "7"))  //> res12: Option[(scalaz.stuff.reader.Stack, Unit)] = Some((List(7, 5, 8, 2, 1
                                                   //| ),()))
-  stackManip2(List(5, 8, 2, 1))(Map("y" -> "7"))  //> res13: Option[(scalaz.stuff.reader.Stack, Unit)] = None
+  stackManip2(List(5, 8, 2, 1))(Map("y" -> "7"))  //> res13: Option[(scalaz.stuff.reader.Stack, Unit)] = None/
 }

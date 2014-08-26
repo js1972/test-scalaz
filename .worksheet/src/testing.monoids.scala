@@ -35,5 +35,12 @@ object monoids {;import org.scalaide.worksheet.runtime.library.WorksheetSupport.
   
   
   (none: Option[String]) |+| "jason".some;System.out.println("""res9: Option[String] = """ + $show(res$9));$skip(40); val res$10 = 
-  (Ordering.LT: Ordering).some |+| none;System.out.println("""res10: Option[scalaz.Ordering] = """ + $show(res$10))}
+  (Ordering.LT: Ordering).some |+| none;System.out.println("""res10: Option[scalaz.Ordering] = """ + $show(res$10));$skip(114); 
+  
+  
+  def lengthCompare(lhs: String, rhs: String): Ordering =
+    (lhs.length ?|? rhs.length) |+| (lhs ?|? rhs);System.out.println("""lengthCompare: (lhs: String, rhs: String)scalaz.Ordering""");$skip(34); val res$11 = 
+  
+  lengthCompare("zen", "ants");System.out.println("""res11: scalaz.Ordering = """ + $show(res$11));$skip(30); val res$12 = 
+  lengthCompare("zen", "ant");System.out.println("""res12: scalaz.Ordering = """ + $show(res$12))}
 }

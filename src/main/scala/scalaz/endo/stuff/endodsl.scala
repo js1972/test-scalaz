@@ -1,9 +1,9 @@
-package scalaz.stuff
+package scalaz.endo.stuff
 
 //http://debasishg.blogspot.com.au/2013/02/a-dsl-with-endo-monoids-for-free.html
 
 import scalaz._
-import Scalaz._
+import scalaz.Scalaz._
 import java.util.{Date, Calendar}
 
 object endodsl {

@@ -1,32 +1,31 @@
-package scalaz.stuff
+package scalaz.writer.stuff
 
-import scalaz._
-import Scalaz._
-
+import WriterLog._
 
 object WriterLog {
   type LOG = List[String]
 }
 
-import WriterLog._
+/**
+ * The writer data structure and monad
+ */
+case class MyWriter[A](log: LOG, a: A) {
+  def map[B](f: A => B): MyWriter[B] =
+    MyWriter(log, f(a))
 
-case class Writer[A](log: LOG, a: A) {
-  def map[B](f: A => B): Writer[B] =
-    Writer(log, f(a))
-
-  def flatMap[B](f: A => Writer[B]): Writer[B] = {
-    val Writer(log2, b) = f(a)
-    Writer(log ::: log2 /* accumulate */, b)
+  def flatMap[B](f: A => MyWriter[B]): MyWriter[B] = {
+    val MyWriter(log2, b) = f(a)
+    MyWriter(log ::: log2 /* accumulate */, b)
   }
 }
 
-object Writer {
+object MyWriter {
   implicit def LogUtilities[A](a: A) = new {
     def nolog =
-      Writer(Nil /* empty */, a)
+      MyWriter(Nil /* empty */, a)
 
     def withlog(log: String) =
-      Writer(List(log), a)
+      MyWriter(List(log), a)
 
     def withvaluelog(log: A => String) =
       withlog(log(a))
@@ -34,14 +33,16 @@ object Writer {
 }
 
 
-
-object writer_example {
-  import Writer._
+/**
+ * A demonstration of using the writer monad
+ */
+object LogWithWriter {
+  import MyWriter._
   
   def main(args: Array[String]): Unit = {
     //val k = args(0).toInt
     val k = 1
-    
+
     val r =
       for {
         a <- k withvaluelog ("starting with " + _)
@@ -56,5 +57,4 @@ object writer_example {
     println("===")
     r.log foreach println
   }
-
 }

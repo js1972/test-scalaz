@@ -1,7 +1,7 @@
-package scalaz.stuff
+package scalaz.writer.stuff
 
 import scalaz._
-import Scalaz._
+import scalaz.Scalaz._
 
 
 object LogWithWriterScalaz {
@@ -15,7 +15,7 @@ object LogWithWriterScalaz {
     //val k = args(0).toInt
     val k = 1
 
-    val r: scalaz.Writer[List[String], Boolean] =
+    val r: Writer[List[String], Boolean] =
       for {
         a <- k.set(List("starting with " + k))
         b <- (a + 7).set(List("adding 7"))

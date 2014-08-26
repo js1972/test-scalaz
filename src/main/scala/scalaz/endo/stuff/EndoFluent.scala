@@ -8,6 +8,7 @@ import java.util.{Date, Calendar}
 import play.api.libs.json._
 import play.api.libs.functional._
 // this one is an extension to play-json to handle class hierarchies from a sealed trait
+// https://github.com/julienrf/play-json-variants
 import julienrf.variants.Variants
 
 

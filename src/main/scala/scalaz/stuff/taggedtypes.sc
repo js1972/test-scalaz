@@ -50,5 +50,7 @@ object taggedtypes {
                                                   //> res9: scalaz.@@[Int,scalaz.Tags.Multiplication] = 10
   Tags.Disjunction(true) |+| Tags.Disjunction(false)
                                                   //> res10: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
-                                                  
+  
+  Tags.Multiplication(BigDecimal(-1)) |+| Tags.Multiplication(5)
+                                                  //> res11: scalaz.@@[scala.math.BigDecimal,scalaz.Tags.Multiplication] = -5
 }

@@ -39,6 +39,7 @@ object taggedtypes {
   Multiplication(2) |+| Multiplication(10);System.out.println("""res8: scalaz.@@[Int,scalaz.Tags.Multiplication] = """ + $show(res$8));$skip(73); val res$9 = 
   
   Tags.Multiplication(10) |+| Monoid[Int @@ Tags.Multiplication].zero;System.out.println("""res9: scalaz.@@[Int,scalaz.Tags.Multiplication] = """ + $show(res$9));$skip(53); val res$10 = 
-  Tags.Disjunction(true) |+| Tags.Disjunction(false);System.out.println("""res10: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$10))}
-                                                  
+  Tags.Disjunction(true) |+| Tags.Disjunction(false);System.out.println("""res10: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$10));$skip(68); val res$11 = 
+  
+  Tags.Multiplication(BigDecimal(-1)) |+| Tags.Multiplication(5);System.out.println("""res11: scalaz.@@[scala.math.BigDecimal,scalaz.Tags.Multiplication] = """ + $show(res$11))}
 }

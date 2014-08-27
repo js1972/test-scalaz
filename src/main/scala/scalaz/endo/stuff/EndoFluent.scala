@@ -1,5 +1,13 @@
 package scalaz.endo.stuff
 
+/**
+ * Another example of composing operations using a fluent api provided by endo and monoid.
+ * This time we define a security which must go through a number of transformations for 
+ * a trade: validate, addValueDate, enrich and journalize.
+ * As the transformations take a Trade and return a Trade they cna be modelled with an
+ * endo and we can use monoidal accumulation.
+ */
+
 import scalaz._
 import Scalaz._
 import java.util.{Date, Calendar}
@@ -12,11 +20,6 @@ import play.api.libs.functional._
 import julienrf.variants.Variants
 
 
-/**
- * Another example of composing operations using a fluent api provided by endo and monoid.
- * This time we define a security which must go through a number of transformations for 
- * a trade: validate, addValueDate, enrich and journalize.
- */
 object EndoFluent {
   sealed trait Instrument
   case class Security(isin: String, name: String) extends Instrument

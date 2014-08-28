@@ -10,9 +10,13 @@ package scalaz.reader.stuff
  * You will note below that scalaz provides the Kleisli object as used below in the
  * "validate" (specification functions) function: Kleisli[ValidationStatus, Order, Boolean].
  * Alternatively, we could create our own Kleisli type ReaderTStatus and implementation
- * object.
+ * object. Or again, we can use ReaderT specifically which is a special case of Kleisli,
+ * but then we need to define our own construction object as scalaz only supplies Reader
+ * which creates a ReaderT with the Id monad - we need our ValidationStatus inside the
+ * reader.
  * Which is better/simpler? Using the scalaz provided Kleisli object is a few less
- * lines of code - you just need to keep providing the extra type parameter. Personally
+ * lines of code - you just need to keep providing the extra type parameter.
+ * The web book learning-scalaz prefers the former.
  * I'm leaning towards how I have it below - using the Kleisli object.
  * 
  * Added:
@@ -41,11 +45,13 @@ object Specifications {
   
   type ValidationStatus[S] = \/[String, S]
   type ProcessingStatus[S] = \/[String, S]
-  //type ReaderTStatus[A, S] = ReaderT[ValidationStatus, A, S]
   
-  //object ReaderTStatus extends KleisliInstances with KleisliFunctions {
-  //  def apply[A, S](f: A => ValidationStatus[S]): ReaderTStatus[A, S] = kleisli(f)
-  //}
+  type ReaderTStatus[A, S] = ReaderT[ValidationStatus, A, S]
+  
+  object ReaderTStatus extends KleisliInstances with KleisliFunctions {
+    def apply[A, S](f: A => ValidationStatus[S]): ReaderTStatus[A, S] = kleisli(f)
+  }
+
   
   
   // Domain model classes
@@ -86,18 +92,21 @@ object Specifications {
 
     } yield c
     
-    // The order parameter is curried and passed here...
+    // The order parameter is curried and passed here... just executes the run() function
+    ///**Implicitly unwrap the Function1 represented by the Kleisli */
+    //implicit def kleisliFn[M[_], A, B](k: Kleisli[M, A, B]): A => M[B] = k.run
     s(order)
   }
 
   
   // The validations to process - note that the order parameter is curried, so these
-  // functions pass a functions (requiring the order as a parameter) to ReaderTStatus
+  // functions pass a function (requiring the order as a parameter) to ReaderTStatus
   // which is executed later with the order parameter...
   // This follows on from the fact that Reader is just a monad over a function!
   
-  //private def validate = ReaderTStatus[Order, Boolean] {order =>
-  private def validate = Kleisli[ValidationStatus, Order, Boolean] {order => 
+  private def validate = ReaderTStatus[Order, Boolean] {order =>
+  //private def validate = ReaderT[ValidationStatus[Boolean], Order, Boolean] {order =>
+  //private def validate = Kleisli[ValidationStatus, Order, Boolean] {order =>
     if (order.lineItems isEmpty) left(s"Validation failed for order $order") else right(true)
   }
 

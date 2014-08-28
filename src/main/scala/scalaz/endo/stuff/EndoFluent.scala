@@ -4,7 +4,7 @@ package scalaz.endo.stuff
  * Another example of composing operations using a fluent api provided by endo and monoid.
  * This time we define a security which must go through a number of transformations for 
  * a trade: validate, addValueDate, enrich and journalize.
- * As the transformations take a Trade and return a Trade they cna be modelled with an
+ * As the transformations take a Trade and return a Trade they can be modelled with an
  * endo and we can use monoidal accumulation.
  */
 

@@ -51,5 +51,26 @@ object applicative {;import org.scalaide.worksheet.runtime.library.WorksheetSupp
   
   // with functions
   val f = ({(_: Int) * 2} |@| {(_: Int) + 10}) { _ + _ };System.out.println("""f  : Int => Int = """ + $show(f ));$skip(7); val res$16 = 
-  f(5);System.out.println("""res16: Int = """ + $show(res$16))}
+  f(5);System.out.println("""res16: Int = """ + $show(res$16));$skip(75); val res$17 = 
+  
+  
+  
+  // Monoidal applicatives
+  Monoid[Int].applicative.ap2(1, 1)(0);System.out.println("""res17: Int = """ + $show(res$17));$skip(59); val res$18 = 
+  Monoid[List[Int]].applicative.ap2(List(1), List(1))(Nil);System.out.println("""res18: List[Int] = """ + $show(res$18));$skip(107); val res$19 = 
+  
+  // Combining applicative functors
+  // Product of List and Option
+  Applicative[List].product[Option];System.out.println("""res19: scalaz.Applicative[[?](List[?], Option[?])] = """ + $show(res$19));$skip(45); val res$20 = 
+  Applicative[List].product[Option].point(1);System.out.println("""res20: (List[Int], Option[Int]) = """ + $show(res$20));$skip(127); val res$21 = 
+  
+  // Product seems to be implemented as a Tuple2, lets append them:
+  ((List(1), 1.some) |@| (List(1), 1.some)) { _ |+| _ };System.out.println("""res21: (List[Int], Option[Int]) = """ + $show(res$21));$skip(74); val res$22 = 
+  
+  
+  // Let compose List and Otion
+  Applicative[List].compose[Option];System.out.println("""res22: scalaz.Applicative[[?]List[Option[?]]] = """ + $show(res$22));$skip(45); val res$23 = 
+  Applicative[List].compose[Option].point(1);System.out.println("""res23: List[Option[Int]] = """ + $show(res$23))}
+  
+  // We can compose applicatives and they remain applicatives....
 }

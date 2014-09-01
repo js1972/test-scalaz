@@ -59,4 +59,29 @@ object applicative {
   val f = ({(_: Int) * 2} |@| {(_: Int) + 10}) { _ + _ }
                                                   //> f  : Int => Int = <function1>
   f(5)                                            //> res16: Int = 25
+  
+  
+  
+  // Monoidal applicatives
+  Monoid[Int].applicative.ap2(1, 1)(0)            //> res17: Int = 2
+  Monoid[List[Int]].applicative.ap2(List(1), List(1))(Nil)
+                                                  //> res18: List[Int] = List(1, 1)
+  
+  // Combining applicative functors
+  // Product of List and Option
+  Applicative[List].product[Option]               //> res19: scalaz.Applicative[[?](List[?], Option[?])] = scalaz.Applicative$$an
+                                                  //| on$2@40494e54
+  Applicative[List].product[Option].point(1)      //> res20: (List[Int], Option[Int]) = (List(1),Some(1))
+  
+  // Product seems to be implemented as a Tuple2, lets append them:
+  ((List(1), 1.some) |@| (List(1), 1.some)) { _ |+| _ }
+                                                  //> res21: (List[Int], Option[Int]) = (List(1, 1),Some(2))
+  
+  
+  // Let compose List and Otion
+  Applicative[List].compose[Option]               //> res22: scalaz.Applicative[[?]List[Option[?]]] = scalaz.Applicative$$anon$1@
+                                                  //| 1c6addb8
+  Applicative[List].compose[Option].point(1)      //> res23: List[Option[Int]] = List(Some(1))
+  
+  // We can compose applicatives and they remain applicatives....
 }

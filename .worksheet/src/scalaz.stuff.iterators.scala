@@ -50,5 +50,24 @@ object iterators {;import org.scalaide.worksheet.runtime.library.WorksheetSuppor
   val failedTree: Tree[Validation[String, Int]] = 1.success[String].node(
     2.success[String].leaf, "boom".failure[Int].leaf);System.out.println("""failedTree  : scalaz.Tree[scalaz.Validation[String,Int]] = """ + $show(failedTree ));$skip(71); val res$13 = 
   
-  failedTree.sequence[({ type l[X]=Validation[String, X] })#l, Int];System.out.println("""res13: scalaz.Validation[String,scalaz.Tree[Int]] = """ + $show(res$13))}
+  failedTree.sequence[({ type l[X]=Validation[String, X] })#l, Int];System.out.println("""res13: scalaz.Validation[String,scalaz.Tree[Int]] = """ + $show(res$13));$skip(140); val res$14 = 
+  
+  // Using Unapply (provided by the *U functions) - much nicer than seeing the ugly type-lambda - see more below:
+  failedTree.sequenceU;System.out.println("""res14: scalaz.Validation[String,scalaz.Tree[Int]] = """ + $show(res$14));$skip(214); 
+  
+  
+  
+  // TYPE LAMBDAS AND UNAPPLY => See the worksheet on Unapply.
+  
+  def sequenceList[F[_]: Applicative, A](xs: List[F[A]]): F[List[A]] =
+    xs.foldRight(List.empty[A].point[F])((a, b) => ^(a, b)(_ :: _));System.out.println("""sequenceList: [F[_], A](xs: List[F[A]])(implicit evidence$5: scalaz.Applicative[F])F[List[A]]""");$skip(41); val res$15 = 
+  
+  sequenceList(List(some(1),some(2)));System.out.println("""res15: Option[List[Int]] = """ + $show(res$15));$skip(35); val res$16 = 
+  sequenceList(List(some(1),none));System.out.println("""res16: Option[List[Int]] = """ + $show(res$16));$skip(301); val res$17 = 
+  
+  
+  // The scala compiler is unable to work out the below types - we can use a type lambda to get around it:
+  
+  //sequenceList(List(\/.right(42), \/.left(NonEmptyList("oops"))))
+  sequenceList[({type l[A] = NonEmptyList[String] \/ A})#l, Int](List(\/.right(42), \/.left(NonEmptyList("oops"))));System.out.println("""res17: scalaz.\/[scalaz.NonEmptyList[String],List[Int]] = """ + $show(res$17))}
 }

@@ -70,4 +70,27 @@ object iterators {
   
   failedTree.sequence[({ type l[X]=Validation[String, X] })#l, Int]
                                                   //> res13: scalaz.Validation[String,scalaz.Tree[Int]] = Failure(boom)
+  
+  // Using Unapply (provided by the *U functions) - much nicer than seeing the ugly type-lambda - see more below:
+  failedTree.sequenceU                            //> res14: scalaz.Validation[String,scalaz.Tree[Int]] = Failure(boom)
+  
+  
+  
+  // TYPE LAMBDAS AND UNAPPLY => See the worksheet on Unapply.
+  
+  def sequenceList[F[_]: Applicative, A](xs: List[F[A]]): F[List[A]] =
+    xs.foldRight(List.empty[A].point[F])((a, b) => ^(a, b)(_ :: _))
+                                                  //> sequenceList: [F[_], A](xs: List[F[A]])(implicit evidence$5: scalaz.Applica
+                                                  //| tive[F])F[List[A]]
+  
+  sequenceList(List(some(1),some(2)))             //> res15: Option[List[Int]] = Some(List(1, 2))
+  sequenceList(List(some(1),none))                //> res16: Option[List[Int]] = None
+  
+  
+  // The scala compiler is unable to work out the below types - we can use a type lambda to get around it:
+  
+  //sequenceList(List(\/.right(42), \/.left(NonEmptyList("oops"))))
+  sequenceList[({type l[A] = NonEmptyList[String] \/ A})#l, Int](List(\/.right(42), \/.left(NonEmptyList("oops"))))
+                                                  //> res17: scalaz.\/[scalaz.NonEmptyList[String],List[Int]] = -\/(NonEmptyList(
+                                                  //| oops))
 }

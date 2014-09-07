@@ -5,7 +5,10 @@ import Scalaz._
 
 import Tags._
 
-  
+
+/**
+ * Also see folding.sc for more stuff on tagged types.
+ */
 object taggedtypes {
   sealed trait KiloGram
   type KG = Double @@ KiloGram

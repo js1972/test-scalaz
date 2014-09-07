@@ -5,7 +5,10 @@ import Scalaz._
 import Tags._
 
 
-object folding {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(124); val res$0 = 
+/**
+ * Also see taggedtypes.sc.
+ */
+object folding {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(160); val res$0 = 
   List(1, 2, 3).foldRight (1) {_ * _};System.out.println("""res0: Int = """ + $show(res$0));$skip(29); val res$1 = 
   9.some.foldLeft(2) {_ + _};System.out.println("""res1: Int = """ + $show(res$1));$skip(43); val res$2 = 
   
@@ -15,13 +18,43 @@ object folding {;import org.scalaide.worksheet.runtime.library.WorksheetSupport.
   Tags.Disjunction(true) |+| Tags.Disjunction(false);System.out.println("""res4: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$4));$skip(59); val res$5 = 
   
   Tags.MinVal.unwrap(Tags.MinVal(1) |+| Tags.MinVal(2));System.out.println("""res5: Int = """ + $show(res$5));$skip(50); val res$6 = 
-  Tags.Disjunction.unwrap(Tags.Disjunction(true));System.out.println("""res6: Boolean = """ + $show(res$6));$skip(138); val res$7 = 
+  Tags.Disjunction.unwrap(Tags.Disjunction(true));System.out.println("""res6: Boolean = """ + $show(res$6));$skip(404); val res$7 = 
   
-  //(List(1, 2, 3) foldMap {Tags.Multiplication}: Int) assert_=== 6
-  List(true, false, true, true) foldMap { Tags.Disjunction.apply };System.out.println("""res7: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$7));$skip(67); 
   
-  val l = Tags.Disjunction.subst(List(true, false, true, true));System.out.println("""l  : List[scalaz.@@[Boolean,scalaz.Tags.Disjunction]] = """ + $show(l ))}
-  //l foldMap { Tags.Disjunction }
   
+  // Lets use the tagged type for multiplication to fold over a list.
+  // Whats happening here is that foldMap needs a function that takes an Int
+  // and returns a Monoid - In this case we are returning the Int tagged as
+  // the type Int @@ Multiplication. Scalaz has an implicit instance to turn
+  // this into a Monoid with multiplication as the mappend operation.
+  
+  Tags.Multiplication;System.out.println("""res7: scalaz.Tag.TagOf[scalaz.Tags.Multiplication] = """ + $show(res$7));$skip(26); val res$8 = 
+  Tags.Multiplication(10);System.out.println("""res8: scalaz.@@[Int,scalaz.Tags.Multiplication] = """ + $show(res$8));$skip(54); val res$9 = 
+  List(1, 2, 3) foldMap { Tags.Multiplication.apply };System.out.println("""res9: scalaz.@@[Int,scalaz.Tags.Multiplication] = """ + $show(res$9));$skip(162); val res$10 = 
+ 
+  
+  
+  // Lets use foldMap again but with a boolean operation (Disjunction which is OR).
+  
+  List(true, false, true, true) foldMap { Tags.Disjunction.apply };System.out.println("""res10: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$10));$skip(457); 
+  
+  
+  
+  // Note that the apply method is called every time in the list which is a waste.
+  // Instead we can use Tags.Disjunction.subst to convert the List of Ints to a
+  // List of tagged Ints instead (Int @@ Tags.Disjunction). We can then just use
+  // fold over the tagged types as per normal.
+  // Or further below I've shown how we can still use foldMap with the identity function.
+  
+  val l = Tags.Disjunction.subst(List(true, false, true, true));System.out.println("""l  : List[scalaz.@@[Boolean,scalaz.Tags.Disjunction]] = """ + $show(l ));$skip(41); val res$11 = 
+  l.fold(Disjunction(false)) { _ |+| _ };System.out.println("""res11: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$11));$skip(23); 
+  
+  
+  val x = l.head;System.out.println("""x  : scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(x ));$skip(46); 
+  val y: Boolean = Tags.Disjunction.unwrap(x);System.out.println("""y  : Boolean = """ + $show(y ));$skip(28); val res$12 = 
+  
+  l foldMap { identity };System.out.println("""res12: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$12));$skip(83); val res$13 = 
+  
+  Tags.Disjunction.subst(List(false, false, false, false)) foldMap { identity };System.out.println("""res13: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = """ + $show(res$13))}
   
 }

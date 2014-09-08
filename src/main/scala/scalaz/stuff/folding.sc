@@ -14,7 +14,8 @@ object folding {
   
   
   List(1, 2, 3) foldMap { identity }              //> res2: Int = 6
-  Tags.Disjunction                                //> res3: scalaz.Tag.TagOf[scalaz.Tags.Disjunction] = scalaz.Tag$TagOf@5010ad7c
+  Tags.Disjunction                                //> res3: scalaz.Tag.TagOf[scalaz.Tags.Disjunction] = scalaz.Tag$TagOf@226f7103
+                                                  //| 
   Tags.Disjunction(true) |+| Tags.Disjunction(false)
                                                   //> res4: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
   
@@ -30,8 +31,8 @@ object folding {
   // the type Int @@ Multiplication. Scalaz has an implicit instance to turn
   // this into a Monoid with multiplication as the mappend operation.
   
-  Tags.Multiplication                             //> res7: scalaz.Tag.TagOf[scalaz.Tags.Multiplication] = scalaz.Tag$TagOf@3a2cf8
-                                                  //| 5b
+  Tags.Multiplication                             //> res7: scalaz.Tag.TagOf[scalaz.Tags.Multiplication] = scalaz.Tag$TagOf@15d0e2
+                                                  //| 48
   Tags.Multiplication(10)                         //> res8: scalaz.@@[Int,scalaz.Tags.Multiplication] = 10
   List(1, 2, 3) foldMap { Tags.Multiplication.apply }
                                                   //> res9: scalaz.@@[Int,scalaz.Tags.Multiplication] = 6
@@ -54,15 +55,23 @@ object folding {
   val l = Tags.Disjunction.subst(List(true, false, true, true))
                                                   //> l  : List[scalaz.@@[Boolean,scalaz.Tags.Disjunction]] = List(true, false, t
                                                   //| rue, true)
+  
+  // this one uses the standard scala fold on Traversable
   l.fold(Disjunction(false)) { _ |+| _ }          //> res11: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
+  
+  // now lets try get it to use Foldable from scalaz
+  ToFoldableOps(l).fold                           //> res12: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
+  implicitly[Foldable[List]].fold(l)              //> res13: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
   
   
   val x = l.head                                  //> x  : scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
   val y: Boolean = Tags.Disjunction.unwrap(x)     //> y  : Boolean = true
   
-  l foldMap { identity }                          //> res12: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
+  l foldMap { identity }                          //> res14: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = true
   
   Tags.Disjunction.subst(List(false, false, false, false)) foldMap { identity }
-                                                  //> res13: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = false
+                                                  //> res15: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = false
+  
+  // See FoldTest.scala for more examples and how to simplify further with fold
   
 }

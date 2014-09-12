@@ -3,8 +3,11 @@ package shapeless.stuff
 import scalaz._
 import Scalaz._
 import shapeless._
-  
-object notes {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(137); 
+
+/**
+ * Testing polymorphic functions
+ */
+object notes {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(176); 
   println("Welcome to the Scala worksheet")
   
   // choose is a function from Sets to Options with no type specific cases
@@ -31,12 +34,13 @@ object notes {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._;
   object size extends Poly1 {
     implicit def caseInt = at[Int](x => 1)
     implicit def caseString = at[String](_.length)
-    implicit def caseTuple[T, U](implicit st : Case.Aux[T, Int], su : Case.Aux[U, Int]) =
-      at[(T, U)](t => size(t._1)+size(t._2))
+    implicit def caseTuple[T, U](implicit st: Case.Aux[T, Int], su: Case.Aux[U, Int]) =
+      at[(T, U)](t => size(t._1) + size(t._2))
   };System.out.println("""res3: List[Option[Int]] = """ + $show(res$3));$skip(388); val res$4 = 
   
   size(23);System.out.println("""res4: Int = """ + $show(res$4));$skip(14); val res$5 = 
   size("foo");System.out.println("""res5: Int = """ + $show(res$5));$skip(20); val res$6 = 
   size((23, "foo"));System.out.println("""res6: Int = """ + $show(res$6));$skip(26); val res$7 = 
   size(((23, "foo"), 13));System.out.println("""res7: Int = """ + $show(res$7))}
+  
 }

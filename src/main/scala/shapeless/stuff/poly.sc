@@ -1,14 +1,16 @@
 package shapeless.stuff
 
-import scalaz._
-import Scalaz._
 import shapeless._
+import poly._
 
 /**
  * Testing polymorphic functions
+ * Using the -> operator (to be close to scala's =>) is how shapeless enables
+ * polymorphic functions.
+ *
+ * From https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0#polymorphic-function-values
  */
-object notes {
-  println("Welcome to the Scala worksheet")       //> Welcome to the Scala worksheet
+object Poly {
   
   // choose is a function from Sets to Options with no type specific cases
   object choose extends (Set ~> Option) {
@@ -20,7 +22,7 @@ object notes {
   
   
   def pairApply(f: Set ~> Option) = (f(Set(1, 2, 3)), f(Set('a', 'b', 'c')))
-                                                  //> pairApply: (f: scalaz.~>[Set,Option])(Option[Int], Option[Char])
+                                                  //> pairApply: (f: shapeless.poly.~>[Set,Option])(Option[Int], Option[Char])
   pairApply(choose)                               //> res2: (Option[Int], Option[Char]) = (Some(1),Some(a))
   
   
@@ -43,5 +45,5 @@ object notes {
   size("foo")                                     //> res5: Int = 3
   size((23, "foo"))                               //> res6: Int = 4
   size(((23, "foo"), 13))                         //> res7: Int = 5
-  
+
 }

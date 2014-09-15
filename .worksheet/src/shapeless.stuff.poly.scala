@@ -7,13 +7,15 @@ import poly._
  * Testing polymorphic functions
  * Using the -> operator (to be close to scala's =>) is how shapeless enables
  * polymorphic functions.
+ *
+ * From https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-2.0.0#polymorphic-function-values
  */
-object notes {
+object Poly {
   
   // choose is a function from Sets to Options with no type specific cases
   object choose extends (Set ~> Option) {
     def apply[T](s : Set[T]) = s.headOption
-  };import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(416); val res$0 = 
+  };import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(533); val res$0 = 
   
   choose(Set(1, 2, 3));System.out.println("""res0: Option[Int] = """ + $show(res$0));$skip(29); val res$1 = 
   choose(Set('a', 'b', 'c'));System.out.println("""res1: Option[Char] = """ + $show(res$1));$skip(85); 

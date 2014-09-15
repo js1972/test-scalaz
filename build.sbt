@@ -2,7 +2,7 @@ name := "scala-test"
  
 version := "1.0"
  
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
 

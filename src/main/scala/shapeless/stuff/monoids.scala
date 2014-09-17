@@ -8,6 +8,10 @@ import shapeless._
  * from the shapeless repo.
  *
  * So basically it enables auto-generation of your own custom typeclasses...
+ * 
+ * HOWEVER - the shapeless-contrib repo "does" offer auto-generation of scalaz
+ * typeclasses...
+ * https://github.com/typelevel/shapeless-contrib
  */
 object MonoidExamples extends App {
   println("\n")

@@ -1,4 +1,4 @@
-package scalaz.stuff
+package scalaz.effect.stuff
 
 import scalaz._
 import Scalaz._
@@ -6,7 +6,7 @@ import effect._
 import IO._
 import java.io
 
-object effect_io {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(190); 
+object effect_io {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(197); 
 
   val action1 = for {
     _ <- putStrLn("Hello, world!")

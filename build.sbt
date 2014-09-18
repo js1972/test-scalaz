@@ -10,6 +10,8 @@ libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.1.0"
 
 libraryDependencies += "org.scalaz" %% "scalaz-effect" % "7.1.0"
 
+libraryDependencies += "org.scalaz" %% "scalaz-iteratee" % "7.1.0"
+
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.3.0"
 
 libraryDependencies += "org.julienrf" %% "play-json-variants" % "0.2"

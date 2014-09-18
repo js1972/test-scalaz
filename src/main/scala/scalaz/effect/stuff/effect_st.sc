@@ -1,4 +1,4 @@
-package scalaz.stuff
+package scalaz.effect.stuff
 
 import scalaz._
 import Scalaz._

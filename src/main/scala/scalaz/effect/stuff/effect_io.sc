@@ -1,4 +1,4 @@
-package scalaz.stuff
+package scalaz.effect.stuff
 
 import scalaz._
 import Scalaz._
@@ -10,8 +10,8 @@ object effect_io {
 
   val action1 = for {
     _ <- putStrLn("Hello, world!")
-  } yield ()                                      //> action1  : scalaz.effect.IO[Unit] = scalaz.effect.IOFunctions$$anon$6@2684c7
-                                                  //| 1b
+  } yield ()                                      //> action1  : scalaz.effect.IO[Unit] = scalaz.effect.IOFunctions$$anon$6@13b93c
+                                                  //| 4c
   
   action1.unsafePerformIO                         //> Hello, world!
   
@@ -20,8 +20,8 @@ object effect_io {
   
   val action2 = IO {
     new java.io.File(".").getAbsolutePath()
-  }                                               //> action2  : scalaz.effect.IO[String] = scalaz.effect.IOFunctions$$anon$6@3d2f
-                                                  //| 0499
+  }                                               //> action2  : scalaz.effect.IO[String] = scalaz.effect.IOFunctions$$anon$6@6655
+                                                  //| 7791
   
   action2.unsafePerformIO                         //> res0: String = C:\MyScratchFolder\eclipse - scala\.
   
@@ -30,7 +30,7 @@ object effect_io {
     val source = scala.io.Source.fromFile("eclipse.ini")
     source.getLines.toStream
   }                                               //> action3  : scalaz.effect.IO[scala.collection.immutable.Stream[String]] = sca
-                                                  //| laz.effect.IOFunctions$$anon$6@76d523bb
+                                                  //| laz.effect.IOFunctions$$anon$6@24ebd76a
   
   action3.unsafePerformIO.toList                  //> res1: List[String] = List(-startup, plugins/org.eclipse.equinox.launcher_1.3
                                                   //| .0.v20130327-1440.jar, --launcher.library, plugins/org.eclipse.equinox.launc

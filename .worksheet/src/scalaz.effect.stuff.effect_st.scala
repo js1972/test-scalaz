@@ -1,4 +1,4 @@
-package scalaz.stuff
+package scalaz.effect.stuff
 
 import scalaz._
 import Scalaz._
@@ -6,7 +6,7 @@ import effect._
 
 object effect_st {
 
-  import ST.{newVar, runST, newArr, returnST};import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(222); 
+  import ST.{newVar, runST, newArr, returnST};import org.scalaide.worksheet.runtime.library.WorksheetSupport._; def main(args: Array[String])=$execute{;$skip(229); 
   
   def e1[S] = for {
     x <- newVar[S](0)

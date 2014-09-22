@@ -49,5 +49,30 @@ object Iteratee_Stuff {;import org.scalaide.worksheet.runtime.library.WorksheetS
   drop1keep1[Int] &= enumerate(Stream(1, 2, 3)) run;System.out.println("""res6: scalaz.Id.Id[Option[Int]] = """ + $show(res$6));$skip(163); val res$7 = 
   
   // here's the flatmap way... I think the for comprehension is clearer!
-  drop[Int, Id](1) flatMap { Unit => head[Int, Id] } &= enumerate(Stream(1, 2, 3)) run;System.out.println("""res7: scalaz.Scalaz.Id[Option[Int]] = """ + $show(res$7))}
+  drop[Int, Id](1) flatMap { Unit => head[Int, Id] } &= enumerate(Stream(1, 2, 3)) run
+  
+  
+  // File input with Iteratees.
+  import java.io._
+  import effect._;System.out.println("""res7: scalaz.Scalaz.Id[Option[Int]] = """ + $show(res$7));$skip(155); 
+  
+  val er = enumReader[IO](new BufferedReader(new FileReader("eclipse.ini")));System.out.println("""er  : scalaz.iteratee.EnumeratorT[scalaz.effect.IoExceptionOr[Char],scalaz.effect.IO] = """ + $show(er ));$skip(91); val res$8 = 
+  
+  (head[IoExceptionOr[Char], IO] &= er).map(_ flatMap {_.toOption}).run.unsafePerformIO;System.out.println("""res8: Option[Char] = """ + $show(res$8));$skip(389); 
+  
+  
+  // We can get the number of lines in two files combined, by composing two
+  // enumerations and using our "counter" iteratee from above...
+  
+  def lengthOfTwoFiles(f1: File, f2: File) = {
+    val l1 = length[IoExceptionOr[Char], IO] &= enumReader[IO](new BufferedReader(new FileReader(f1)))
+    val l2 = l1 &= enumReader[IO](new BufferedReader(new FileReader(f2)))
+    l2.run
+  };System.out.println("""lengthOfTwoFiles: (f1: java.io.File, f2: java.io.File)scalaz.effect.IO[Int]""");$skip(85); val res$9 = 
+  lengthOfTwoFiles(new File("eclipse.ini"), new File("notice.html")).unsafePerformIO;System.out.println("""res9: Int = """ + $show(res$9));$skip(120); 
+  
+  // more examples...
+  val readLn = takeWhile[Char, List](_ != '\n') flatMap (ln => drop[Char, Id](1).map(_ => ln));System.out.println("""readLn  : scalaz.iteratee.IterateeT[Char,scalaz.Id.Id,List[Char]] = """ + $show(readLn ));$skip(68); val res$10 = 
+  (readLn &= enumStream("Iteratees\nare\ncomposable".toStream)).run;System.out.println("""res10: scalaz.Id.Id[List[Char]] = """ + $show(res$10));$skip(107); val res$11 = 
+  (collect[List[Char], List] %= readLn.sequenceI &= enumStream("Iteratees\nare\ncomposable".toStream)).run;System.out.println("""res11: scalaz.Id.Id[List[List[Char]]] = """ + $show(res$11))}
 }

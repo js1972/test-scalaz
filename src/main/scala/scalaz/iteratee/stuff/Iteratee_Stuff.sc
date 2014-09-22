@@ -57,4 +57,39 @@ object Iteratee_Stuff {
   // here's the flatmap way... I think the for comprehension is clearer!
   drop[Int, Id](1) flatMap { Unit => head[Int, Id] } &= enumerate(Stream(1, 2, 3)) run
                                                   //> res7: scalaz.Scalaz.Id[Option[Int]] = Some(2)
+  
+  
+  // File input with Iteratees.
+  import java.io._
+  import effect._
+  
+  val er = enumReader[IO](new BufferedReader(new FileReader("eclipse.ini")))
+                                                  //> er  : scalaz.iteratee.EnumeratorT[scalaz.effect.IoExceptionOr[Char],scalaz.
+                                                  //| effect.IO] = scalaz.iteratee.EnumeratorTFunctions$$anon$15@183ff528
+  
+  (head[IoExceptionOr[Char], IO] &= er).map(_ flatMap {_.toOption}).run.unsafePerformIO
+                                                  //> res8: Option[Char] = Some(-)
+  
+  
+  // We can get the number of lines in two files combined, by composing two
+  // enumerations and using our "counter" iteratee from above...
+  
+  def lengthOfTwoFiles(f1: File, f2: File) = {
+    val l1 = length[IoExceptionOr[Char], IO] &= enumReader[IO](new BufferedReader(new FileReader(f1)))
+    val l2 = l1 &= enumReader[IO](new BufferedReader(new FileReader(f2)))
+    l2.run
+  }                                               //> lengthOfTwoFiles: (f1: java.io.File, f2: java.io.File)scalaz.effect.IO[Int]
+                                                  //| 
+  lengthOfTwoFiles(new File("eclipse.ini"), new File("notice.html")).unsafePerformIO
+                                                  //> res9: Int = 9493
+  
+  // more examples...
+  val readLn = takeWhile[Char, List](_ != '\n') flatMap (ln => drop[Char, Id](1).map(_ => ln))
+                                                  //> readLn  : scalaz.iteratee.IterateeT[Char,scalaz.Id.Id,List[Char]] = scalaz.
+                                                  //| iteratee.IterateeTFunctions$$anon$9@12944313
+  (readLn &= enumStream("Iteratees\nare\ncomposable".toStream)).run
+                                                  //> res10: scalaz.Id.Id[List[Char]] = List(I, t, e, r, a, t, e, e, s)
+  (collect[List[Char], List] %= readLn.sequenceI &= enumStream("Iteratees\nare\ncomposable".toStream)).run
+                                                  //> res11: scalaz.Id.Id[List[List[Char]]] = List(List(I, t, e, r, a, t, e, e, s
+                                                  //| ), List(a, r, e), List(c, o, m, p, o, s, a, b, l, e))
 }

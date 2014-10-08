@@ -58,7 +58,42 @@ object reader {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._
     c <- myName("Third")
   } yield (a, b, c);System.out.println("""localExample: => scalaz.Reader[String,(String, String, String)]""");$skip(26); val res$8 = 
   
-  localExample("Fred")
+  localExample("Fred");System.out.println("""res8: scalaz.Id.Id[(String, String, String)] = """ + $show(res$8));$skip(308); 
+  
+  
+  
+  
+  
+  // Some more simple examples...
+  // from https://www.evernote.com/shard/s4/sh/9f3b79df-229d-48fc-9758-5cfc38ab0664/94410496b7179081346b551e647837c0
+  
+  // Here we compose some functions. Scalas Function1 lets us compose
+  // new functions using andThen
+  
+  val triple = (i: Int) => i * 3;System.out.println("""triple  : Int => Int = """ + $show(triple ));$skip(12); val res$9 = 
+  triple(3);System.out.println("""res9: Int = """ + $show(res$9));$skip(51); 
+  
+  val thricePlus2 = triple andThen (i => i + 2);System.out.println("""thricePlus2  : Int => Int = """ + $show(thricePlus2 ));$skip(17); val res$10 = 
+  thricePlus2(3);System.out.println("""res10: Int = """ + $show(res$10));$skip(56); 
+  
+  val myfunc = thricePlus2 andThen (i => i.toString);System.out.println("""myfunc  : Int => String = """ + $show(myfunc ));$skip(12); val res$11 = 
+  myfunc(3);System.out.println("""res11: String = """ + $show(res$11));$skip(194); 
+  
+  // The Reader Monad is a monad defined for unary functions,
+  // using andThen as the map operation. A Reader, then, is
+  // just a Function1.
+  
+  val triple_2 = Reader((i: Int) => i * 3);System.out.println("""triple_2  : scalaz.Reader[Int,Int] = """ + $show(triple_2 ));$skip(14); val res$12 = 
+  triple_2(3);System.out.println("""res12: scalaz.Id.Id[Int] = """ + $show(res$12));$skip(51); 
+  
+  val thricePlus2_2 = triple_2 map (i => i + 2);System.out.println("""thricePlus2_2  : scalaz.Kleisli[scalaz.Id.Id,Int,Int] = """ + $show(thricePlus2_2 ));$skip(19); val res$13 = 
+  thricePlus2_2(3);System.out.println("""res13: scalaz.Id.Id[Int] = """ + $show(res$13));$skip(144); 
+  
+  // The map and flatMap methods let us use for comprehensions to define new Readers:
+  
+  val f_3 = for (i <- thricePlus2) yield i.toString;System.out.println("""f_3  : Int => String = """ + $show(f_3 ));$skip(9); val res$14 = 
+  f_3(3)
+  
   
   
   
@@ -69,7 +104,7 @@ object reader {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._
   //object ReaderTOption extends KleisliFunctions with KleisliInstances {
   object ReaderTOption extends KleisliInstances with KleisliFunctions {
     def apply[A, B](f: A => Option[B]): ReaderTOption[A, B] = kleisli(f)
-  };System.out.println("""res8: scalaz.Id.Id[(String, String, String)] = """ + $show(res$8));$skip(512); 
+  };System.out.println("""res14: String = """ + $show(res$14));$skip(515); 
   
   def configure(key: String) = ReaderTOption[Map[String, String], String] { _.get(key) };System.out.println("""configure: (key: String)scalaz.stuff.reader.ReaderTOption[Map[String,String],String]""");$skip(164); 
   
@@ -82,14 +117,14 @@ object reader {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._
     "host" -> "eed3si9n.com",
     "user" -> "sa",
     "password" -> "****"
-  );System.out.println("""goodConfig  : scala.collection.immutable.Map[String,String] = """ + $show(goodConfig ));$skip(33); val res$9 = 
+  );System.out.println("""goodConfig  : scala.collection.immutable.Map[String,String] = """ + $show(goodConfig ));$skip(33); val res$15 = 
   
-  setupConnection(goodConfig);System.out.println("""res9: Option[(String, String, String)] = """ + $show(res$9));$skip(78); 
+  setupConnection(goodConfig);System.out.println("""res15: Option[(String, String, String)] = """ + $show(res$15));$skip(78); 
   
   val badConfig = Map(
     "host" -> "example.com",
     "user" -> "sa"
-  );System.out.println("""badConfig  : scala.collection.immutable.Map[String,String] = """ + $show(badConfig ));$skip(32); val res$10 = 
+  );System.out.println("""badConfig  : scala.collection.immutable.Map[String,String] = """ + $show(badConfig ));$skip(32); val res$16 = 
   
   setupConnection(badConfig)
   
@@ -124,7 +159,7 @@ object reader {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._
   
   
   type Stack = List[Int]
-  type Config = Map[String, String];System.out.println("""res10: Option[(String, String, String)] = """ + $show(res$10));$skip(1585); 
+  type Config = Map[String, String];System.out.println("""res16: Option[(String, String, String)] = """ + $show(res$16));$skip(1585); 
   
   val pop: StateTReaderTOption[Config, Stack, Int] = {
     import StateTReaderTOption.{get, put}
@@ -145,9 +180,9 @@ object reader {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._
     _ <- push(3)
     a <- pop
     b <- pop
-  } yield b;System.out.println("""stackManip: => scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.Config,scalaz.stuff.reader.Stack,Int]""");$skip(41); val res$11 = 
+  } yield b;System.out.println("""stackManip: => scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.Config,scalaz.stuff.reader.Stack,Int]""");$skip(41); val res$17 = 
   
-  stackManip(List(5, 8, 2, 1))(Map());System.out.println("""res11: Option[(scalaz.stuff.reader.Stack, Int)] = """ + $show(res$11));$skip(229); 
+  stackManip(List(5, 8, 2, 1))(Map());System.out.println("""res17: Option[(scalaz.stuff.reader.Stack, Int)] = """ + $show(res$17));$skip(229); 
   
   
   // Lets modify configure...
@@ -158,8 +193,8 @@ object reader {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._
   def stackManip2: StateTReaderTOption[Config, Stack, Unit] = for {
     x <- configure2("x")
     a <- push(x.toInt)
-  } yield a;System.out.println("""stackManip2: => scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.Config,scalaz.stuff.reader.Stack,Unit]""");$skip(52); val res$12 = 
+  } yield a;System.out.println("""stackManip2: => scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.Config,scalaz.stuff.reader.Stack,Unit]""");$skip(52); val res$18 = 
   
-  stackManip2(List(5, 8, 2, 1))(Map("x" -> "7"));System.out.println("""res12: Option[(scalaz.stuff.reader.Stack, Unit)] = """ + $show(res$12));$skip(49); val res$13 = 
-  stackManip2(List(5, 8, 2, 1))(Map("y" -> "7"));System.out.println("""res13: Option[(scalaz.stuff.reader.Stack, Unit)] = """ + $show(res$13))}
+  stackManip2(List(5, 8, 2, 1))(Map("x" -> "7"));System.out.println("""res18: Option[(scalaz.stuff.reader.Stack, Unit)] = """ + $show(res$18));$skip(49); val res$19 = 
+  stackManip2(List(5, 8, 2, 1))(Map("y" -> "7"));System.out.println("""res19: Option[(scalaz.stuff.reader.Stack, Unit)] = """ + $show(res$19))}
 }

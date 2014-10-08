@@ -56,4 +56,27 @@ object taggedtypes {
   
   Tags.Multiplication(BigDecimal(-1)) |+| Tags.Multiplication(5)
                                                   //> res11: scalaz.@@[scala.math.BigDecimal,scalaz.Tags.Multiplication] = -5
+  
+  
+  // Tags are not only useful for selecting typeclass instances
+  // lets create our own tag, named Sorted which indicates a List that has been sorted
+  sealed trait Sorted
+  val Sorted = Tag.of[Sorted]                     //> Sorted  : scalaz.Tag.TagOf[scalaz.stuff.taggedtypes.Sorted] = scalaz.Tag$Ta
+                                                  //| gOf@65694399
+
+  // a sort function which will sort then add the Tag
+  def sortList[A: scala.math.Ordering](as: List[A]): List[A] @@ Sorted =
+    Sorted(as.sorted)                             //> sortList: [A](as: List[A])(implicit evidence$1: scala.math.Ordering[A])scal
+                                                  //| az.@@[List[A],scalaz.stuff.taggedtypes.Sorted]
+
+  // now we can define a function which takes lists which are tagged as being sorted
+  def minOption[A](a: List[A] @@ Sorted): Option[A] = Sorted.unwrap(a).headOption
+                                                  //> minOption: [A](a: scalaz.@@[List[A],scalaz.stuff.taggedtypes.Sorted])Option
+                                                  //| [A]
+
+  // why is this implicit conversion needed - works fine without it???
+  implicit val ord = implicitly[Order[Option[Int]]].toScalaOrdering
+                                                  //> ord  : scala.math.Ordering[Option[Int]] = scalaz.Order$$anon$1@d6e32d7
+  minOption(sortList(List(3,2,1,5,3)))            //> res12: Option[Int] = Some(1)
+  assert(minOption(sortList(List(3,2,1,5,3))) === Some(1))
 }

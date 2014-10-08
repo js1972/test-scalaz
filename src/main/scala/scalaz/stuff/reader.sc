@@ -65,6 +65,44 @@ object reader {
   
   
   
+  
+  
+  // Some more simple examples...
+  // from https://www.evernote.com/shard/s4/sh/9f3b79df-229d-48fc-9758-5cfc38ab0664/94410496b7179081346b551e647837c0
+  
+  // Here we compose some functions. Scalas Function1 lets us compose
+  // new functions using andThen
+  
+  val triple = (i: Int) => i * 3                  //> triple  : Int => Int = <function1>
+  triple(3)                                       //> res9: Int = 9
+  
+  val thricePlus2 = triple andThen (i => i + 2)   //> thricePlus2  : Int => Int = <function1>
+  thricePlus2(3)                                  //> res10: Int = 11
+  
+  val myfunc = thricePlus2 andThen (i => i.toString)
+                                                  //> myfunc  : Int => String = <function1>
+  myfunc(3)                                       //> res11: String = 11
+  
+  // The Reader Monad is a monad defined for unary functions,
+  // using andThen as the map operation. A Reader, then, is
+  // just a Function1.
+  
+  val triple_2 = Reader((i: Int) => i * 3)        //> triple_2  : scalaz.Reader[Int,Int] = Kleisli(<function1>)
+  triple_2(3)                                     //> res12: scalaz.Id.Id[Int] = 9
+  
+  val thricePlus2_2 = triple_2 map (i => i + 2)   //> thricePlus2_2  : scalaz.Kleisli[scalaz.Id.Id,Int,Int] = Kleisli(<function1>
+                                                  //| )
+  thricePlus2_2(3)                                //> res13: scalaz.Id.Id[Int] = 11
+  
+  // The map and flatMap methods let us use for comprehensions to define new Readers:
+  
+  val f_3 = for (i <- thricePlus2) yield i.toString
+                                                  //> f_3  : Int => String = <function1>
+  f_3(3)                                          //> res14: String = 11
+  
+  
+  
+  
   // Example use of a Monad Transformer: ReaderT to combine a Reader with Option,
   // which gives us failure handling in a Reader ->
   
@@ -91,7 +129,7 @@ object reader {
   )                                               //> goodConfig  : scala.collection.immutable.Map[String,String] = Map(host -> e
                                                   //| ed3si9n.com, user -> sa, password -> ****)
   
-  setupConnection(goodConfig)                     //> res9: Option[(String, String, String)] = Some((eed3si9n.com,sa,****))
+  setupConnection(goodConfig)                     //> res15: Option[(String, String, String)] = Some((eed3si9n.com,sa,****))
   
   val badConfig = Map(
     "host" -> "example.com",
@@ -99,7 +137,7 @@ object reader {
   )                                               //> badConfig  : scala.collection.immutable.Map[String,String] = Map(host -> ex
                                                   //| ample.com, user -> sa)
   
-  setupConnection(badConfig)                      //> res10: Option[(String, String, String)] = None
+  setupConnection(badConfig)                      //> res16: Option[(String, String, String)] = None
   
   
   // We can continue to stack monads. Here we will stack StateT to represent state transfer
@@ -142,7 +180,7 @@ object reader {
       _ <- put(xs)
     } yield x
   }                                               //> pop  : scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.Config,s
-                                                  //| calaz.stuff.reader.Stack,Int] = scalaz.IndexedStateT$$anon$10@2927ac23
+                                                  //| calaz.stuff.reader.Stack,Int] = scalaz.IndexedStateT$$anon$10@4f902864
   def push(x: Int): StateTReaderTOption[Config, Stack, Unit] = {
     import StateTReaderTOption.{get, put}
     for {
@@ -158,7 +196,7 @@ object reader {
   } yield b                                       //> stackManip: => scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader.
                                                   //| Config,scalaz.stuff.reader.Stack,Int]
   
-  stackManip(List(5, 8, 2, 1))(Map())             //> res11: Option[(scalaz.stuff.reader.Stack, Int)] = Some((List(8, 2, 1),5))
+  stackManip(List(5, 8, 2, 1))(Map())             //> res17: Option[(scalaz.stuff.reader.Stack, Int)] = Some((List(8, 2, 1),5))
   
   
   // Lets modify configure...
@@ -173,7 +211,7 @@ object reader {
   } yield a                                       //> stackManip2: => scalaz.stuff.reader.StateTReaderTOption[scalaz.stuff.reader
                                                   //| .Config,scalaz.stuff.reader.Stack,Unit]
   
-  stackManip2(List(5, 8, 2, 1))(Map("x" -> "7"))  //> res12: Option[(scalaz.stuff.reader.Stack, Unit)] = Some((List(7, 5, 8, 2, 1
+  stackManip2(List(5, 8, 2, 1))(Map("x" -> "7"))  //> res18: Option[(scalaz.stuff.reader.Stack, Unit)] = Some((List(7, 5, 8, 2, 1
                                                   //| ),()))
-  stackManip2(List(5, 8, 2, 1))(Map("y" -> "7"))  //> res13: Option[(scalaz.stuff.reader.Stack, Unit)] = None/
+  stackManip2(List(5, 8, 2, 1))(Map("y" -> "7"))  //> res19: Option[(scalaz.stuff.reader.Stack, Unit)] = None
 }
